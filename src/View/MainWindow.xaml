@@ -1,0 +1,121 @@
+﻿<controls:MetroWindow  
+    x:Class="VercorsStudio.PhraseApp.Client.Window.View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:VercorsStudio.PhraseApp.Client.Window.ViewModel"
+    mc:Ignorable="d"
+    Title="PhraseApp Client" 
+    Height="600" Width="1100"
+    MinHeight="600" MinWidth="1100"
+    Icon="../logo.ico"
+    WindowStartupLocation="CenterScreen" 
+    d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}">
+    
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </Window.Resources>
+    
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button 
+                x:Name="btnEmail" 
+                Command="{Binding OpenLoginDialog}"/>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    
+    <Grid x:Name="layoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel 
+                x:Name="stackPanelActions" 
+                Grid.Column="0" 
+                Orientation="Horizontal">
+                <Button Content="Delete all keys" Command="{Binding DeleteAllKeys}"/>
+                <Button Content="Download all" Command="{Binding DownloadAll}"/>
+                <Button Content="Upload all" Command="{Binding UploadAll}"/>
+            </StackPanel>
+            <TextBlock 
+                Grid.Column="1"
+                Text="Working folder"
+                VerticalAlignment="Center"
+                Margin="5"/>
+            <TextBox
+                Grid.Column="2"
+                IsReadOnly="True"
+                Margin="5"
+                Text="{Binding WorkingFolder}"/>
+            <Button
+                Grid.Column="3"
+                Margin="5"
+                Padding="10,0"
+                Content="..."
+                Command="{Binding ChooseWorkingFolder}"/>
+        </Grid>
+        
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Files}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border 
+                            BorderBrush="LightGray" 
+                            BorderThickness="1"
+                            Padding="5"
+                            Margin="10"
+                            CornerRadius="5">
+                            <StackPanel>
+                                <TextBlock 
+                                    Margin="10"
+                                    Text="{Binding}"
+                                    HorizontalAlignment="Center"
+                                    FontSize="22"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button 
+                                        MinWidth="100"
+                                        Content="Upload"
+                                        Command="{Binding ElementName=layoutRoot, Path=DataContext.UploadLocale}"
+                                        CommandParameter="{Binding}"/>
+                                    <Button 
+                                        MinWidth="100"
+                                        Content="Download" 
+                                        Command="{Binding ElementName=layoutRoot, Path=DataContext.DownloadLocale}"
+                                        CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <ScrollViewer Grid.Row="2">
+            <RichTextBox 
+                x:Name="richRichTextBox"
+                IsReadOnly="True"
+                BorderThickness="0,1,0,1"
+                Grid.Row="1"
+                FontSize="10"/>    
+        </ScrollViewer>
+    </Grid>
+</controls:MetroWindow>
